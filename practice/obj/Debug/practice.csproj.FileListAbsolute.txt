@@ -1,0 +1,6 @@
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\practice\bin\Debug\practice.dll
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\practice\bin\Debug\practice.pdb
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\practice\obj\Debug\practice.csprojAssemblyReference.cache
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\practice\obj\Debug\practice.csproj.CoreCompileInputs.cache
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\practice\obj\Debug\practice.dll
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\practice\obj\Debug\practice.pdb

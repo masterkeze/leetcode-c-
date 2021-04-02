@@ -1,0 +1,7 @@
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\Exercise\bin\Debug\Exercise.exe.config
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\Exercise\bin\Debug\Exercise.exe
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\Exercise\bin\Debug\Exercise.pdb
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\Exercise\obj\Debug\Exercise.csprojAssemblyReference.cache
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\Exercise\obj\Debug\Exercise.csproj.CoreCompileInputs.cache
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\Exercise\obj\Debug\Exercise.exe
+C:\Users\admin.SKY-20190805KSD\Documents\GitHub\leetcode-c#\Exercise\obj\Debug\Exercise.pdb
