@@ -720,6 +720,66 @@ namespace Exercise
             // totoalCount = A + B + C + D
             return (leftCount + rightCount - totalCount - blockCount) / 2;
         }
+
+        public void flipRow(int[] row)
+        {
+            for (int i = 0; i < row.Length; i++)
+            {
+                row[i] = 1 - row[i];
+            }
+        }
+        public void flipCol(int[][] A, int index)
+        {
+            for (int i = 0; i < A.Length; i++)
+            {
+                A[i][index] = 1 - A[i][index];
+            }
+        }
+        public int getScore(int[][] A)
+        {
+            int score = 0;
+            for (int i = 0; i < A.Length; i++)
+            {
+                string str = string.Join("", A[i]);
+                score += Convert.ToInt32(str, 2);
+            }
+            return score;
+        }
+        public int MatrixScore(int[][] A)
+        {
+            // 第一列都必须是1，之后每列比较下翻和不翻哪个得分高
+            int width = A[0].Length;
+            int height = A.Length;
+            for (int c = 0; c < width; c++)
+            {
+                int counter = 0;
+                for (int r = 0; r < height; r++)
+                {
+                    if (c == 0)
+                    {
+                        if (A[r][c] == 0)
+                        {
+                            flipRow(A[r]);
+                        }
+                    }
+                    else
+                    {
+                        if (A[r][c] == 0)
+                        {
+                            counter -= 1;
+                        } else
+                        {
+                            counter += 1;
+                        }
+                    }
+                }
+                if (counter < 0)
+                {
+                    flipCol(A, c);
+                }
+            }
+            return getScore(A);
+        }
         public static void Main()
         {
             Solution solution = new Solution();
