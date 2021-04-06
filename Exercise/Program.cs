@@ -780,16 +780,166 @@ namespace Exercise
             }
             return getScore(A);
         }
+        public int RemoveDuplicates(int[] nums)
+        {
+            // Dictionary<int,int> counter = new Dictionary<int, int>();
+            int length = nums.Length;
+            int number = Math.Min(2, length);
+            for (int i = 0; i < length; i++)
+            {
+                int temp = nums[i];
+                if (i < 2) continue;
+                if (temp != nums[number - 2])
+                {
+                    nums[number] = temp;
+                }
+                //if (!counter.ContainsKey(temp))
+                //{
+                //    counter[temp] = 0;
+                //}
+                //if (counter[temp] < 2)
+                //{
+                //    counter[temp] += 1;
+                //    nums[number] = temp;
+                //    number += 1;
+                //}
+            }
+            return number;
+        }
+        public int LeastBricks(List<List<int>> wall)
+        {
+            Dictionary<int, int> cache = new Dictionary<int, int>();
+            int height = wall.Count;
+            for (int i = 0; i < height; i++)
+            {
+                int sum = 0;
+                for (int j = 0; j < wall[i].Count - 1; j++)
+                {
+                    sum += wall[i][j];
+                    if (!cache.ContainsKey(sum)) cache[sum] = 0;
+                    cache[sum] += 1;
+                }
+            }
+            return cache.Values.Count > 0 ? height - cache.Values.Max() : height;
+            //Dictionary<int, List<(int, int)>> cache = new Dictionary<int, List<(int, int)>>();
+            //int height = wall.Count;
+            //int progress = 0;
+            //int maxprogress = 0;
+            //cache[0] = new List<(int, int)>();
+            //for (int r = 0; r < height; r++)
+            //{
+            //    cache[0].Add((r, 0));
+            //}
+            //int maxLength = 0;
+            //while (progress <= maxprogress)
+            //{
+            //    if (!cache.ContainsKey(progress))
+            //    {
+            //        progress += 1;
+            //        continue;
+            //    }
+            //    int length = cache[progress].Count;
+            //    Console.WriteLine($"progress:{progress};length:{length};");
+            //    if (progress != 0)
+            //    {
+            //        maxLength = Math.Max(maxLength, length);
+            //    }
+            //    for (int i = 0; i < length; i++)
+            //    {
+            //        (int row, int index) = cache[progress][i];
+
+            //        if (index + 1 < wall[row].Count)
+            //        {
+            //            int brick = wall[row][index];
+            //            if (!cache.ContainsKey(progress + brick))
+            //            {
+            //                cache[progress + brick] = new List<(int, int)>();
+            //            }
+            //            cache[progress + brick].Add((row, index + 1));
+            //            maxprogress = Math.Max(maxprogress, progress + brick);
+            //        }
+
+            //    }
+            //    cache.Remove(progress);
+            //    progress += 1;
+            //}
+            //return height - maxLength;
+        }
+        public bool UniqueOccurrences(int[] arr)
+        {
+            Dictionary<int, int> counter = new Dictionary<int, int>();
+            Dictionary<int, int> inverse = new Dictionary<int, int>();
+            foreach (int num in arr)
+            {
+                if (!counter.ContainsKey(num)) counter[num] = 0;
+                counter[num] += 1;
+            }
+
+            foreach (int count in counter.Values)
+            {
+                if (!inverse.ContainsKey(count)) inverse[count] = 0;
+                inverse[count] += 1;
+                if (inverse[count] > 1) return false;
+            }
+
+            return true;
+        }
+        public int[] GetRow(int[,] matrix, int rowNumber)
+        {
+            return Enumerable.Range(0, matrix.GetLength(1))
+                    .Select(x => matrix[rowNumber, x])
+                    .ToArray();
+        }
+        public int MinFallingPathSum(int[][] arr)
+        {
+            int height = arr.Length;
+            int width = arr[0].Length;
+            int[][] dp = new int[height][];
+            for (int i = 0; i < height; i++)
+            {
+                dp[i] = new int[width];
+            }
+            for (int r = 0; r < height; r++)
+            {
+                List<int> row;
+                if (r != 0) {
+                    row = new List<int>(dp[r - 1]);
+                }
+                else
+                {
+                    row = new List<int>(dp[r]);
+                }
+                
+                for (int c = 0; c < width; c++)
+                {
+                    if (r == 0)
+                    {
+                        dp[r][c] = arr[r][c];
+                    } else
+                    {
+                        int temp = row[c];
+                        row.RemoveAt(c);
+                        dp[r][c] = arr[r][c] + row.Min();
+                        row.Insert(c, temp);
+                    }
+                }
+            }
+            return new List<int>(dp[height-1]).Min();
+        }
         public static void Main()
         {
             Solution solution = new Solution();
+            //var input = new List<List<int>>();
+            //input.Add(new List<int> { 1, 1 });
+            //input.Add(new List<int> { 2 });
+            //input.Add(new List<int> { 1, 1 });
 
-            //var output = solution.SubsetsWithDup(new int[] { 1, 2, 3, 4, 5 });
             //Console.WriteLine(output.ToString());
             // var output = solution.NumDecodings("111111111");
             // Console.WriteLine(output.ToString());
-            Console.WriteLine((90/8).ToString());
+            // Console.WriteLine(output.ToString());
             Console.ReadLine();
         }
+
     }
 }
