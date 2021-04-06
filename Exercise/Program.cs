@@ -926,6 +926,56 @@ namespace Exercise
             }
             return new List<int>(dp[height-1]).Min();
         }
+        public void BitOperation()
+        {
+            int c = 1;
+            Console.WriteLine(Convert.ToString(c, toBase: 2));
+            c = c | 2;
+            Console.WriteLine(Convert.ToString(c, toBase: 2));
+            c = c & 1;
+            Console.WriteLine(Convert.ToString(c, toBase: 2));
+            c = c << 2;
+            Console.WriteLine(Convert.ToString(c, toBase: 2));
+            c = c >> 2;
+            Console.WriteLine(Convert.ToString(c, toBase: 2));
+            c = c >> 2;
+            Console.WriteLine(Convert.ToString(c, toBase: 2));
+        }
+        public void GameOfLife(int[][] board)
+        {
+            int[] dx = new int[8] { 0, 1, 1, 1, 0, -1, -1, -1 };
+            int[] dy = new int[8] { -1, -1, 0, 1, 1, 1, 0, -1 };
+            for (int y = 0; y < board.Length; y++)
+            {
+                for (int x = 0; x < board[0].Length; x++)
+                {
+                    int ally = 0;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        int newx = x + dx[i];
+                        int newy = y + dy[i];
+                        if (newx > 0 && newx < board[0].Length && newy > 0 && newy < board.Length && (board[newy][newx] & 1) == 1) 
+                        {
+                            ally += 1;
+                        }
+                    }
+                    if (ally == 2)
+                    {
+                        board[y][x] |= board[y][x] * 2;
+                    }else if (ally == 3)
+                    {
+                        board[y][x] |= 2;
+                    }
+                }
+            }
+            for (int y = 0; y < board.Length; y++)
+            {
+                for (int x = 0; x < board[0].Length; x++)
+                {
+                    board[y][x] = board[y][x] >> 1;
+                }
+            }
+        }
         public static void Main()
         {
             Solution solution = new Solution();
@@ -938,6 +988,7 @@ namespace Exercise
             // var output = solution.NumDecodings("111111111");
             // Console.WriteLine(output.ToString());
             // Console.WriteLine(output.ToString());
+            solution.BitOperation();
             Console.ReadLine();
         }
 
