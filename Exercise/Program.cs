@@ -954,7 +954,7 @@ namespace Exercise
                     {
                         int newx = x + dx[i];
                         int newy = y + dy[i];
-                        if (newx > 0 && newx < board[0].Length && newy > 0 && newy < board.Length && (board[newy][newx] & 1) == 1) 
+                        if (newx >= 0 && newx < board[0].Length && newy >= 0 && newy < board.Length && (board[newy][newx] & 1) == 1) 
                         {
                             ally += 1;
                         }
@@ -975,6 +975,69 @@ namespace Exercise
                     board[y][x] = board[y][x] >> 1;
                 }
             }
+        }
+        public bool Search(int[] nums, int target)
+        {
+            int cur = 0;
+            int last = nums[cur];
+            if (target == last) return true;
+            while (target > last)
+            {
+                cur += 1;
+                if (cur > nums.Length - 1) return false;
+                int now = nums[cur];
+                if (now == target) return true;
+                if (now < last) return false;
+                last = now;
+            }
+            cur = nums.Length - 1;
+            while (target < last)
+            {
+                if (cur < 0) return false;
+                int now = nums[cur];
+                if (now == target) return true;
+                if (now > last) return false;
+                last = now;
+                cur -= 1;
+            }
+            return false;
+        // 找到旋转点后二分
+        }
+        public string DecodeString(string s)
+        {
+            int start = s.IndexOf('[');
+            int end = -1;
+            if (start == -1) return s;
+            int counter = 1;
+            int digitstart = s.IndexOfAny(new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
+            int repeat = int.Parse(s.Substring(digitstart, start - digitstart));
+            for (int i = start + 1; i < s.Length; i++)
+            {
+                switch (s[i])
+                {
+                    case ']':
+                        counter -= 1;
+                        break;
+                    case '[':
+                        counter += 1;
+                        break;
+                    default:
+                        break;
+                }
+                if (counter == 0)
+                {
+                    end = i;
+                    break;
+                }
+            }
+            string left = s.Substring(0, digitstart);
+            string mid = DecodeString(s.Substring(start + 1, end - start - 1));
+            for (int i = 0; i < repeat; i++)
+            {
+                left += mid;
+            }
+            string right = DecodeString(s.Substring(end + 1));
+            return left + right;
         }
         public static void Main()
         {
