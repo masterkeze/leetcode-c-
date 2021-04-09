@@ -1039,6 +1039,200 @@ namespace Exercise
             string right = DecodeString(s.Substring(end + 1));
             return left + right;
         }
+        public int FindMin(int[] nums)
+        {
+            int min = int.MinValue;
+            foreach (var item in nums)
+            {
+                min = Math.Min(min, item);
+            }
+            return min;
+        }
+        public int BestSeqAtIndex(int[] height, int[] weight)
+        {
+            if (height.Length == 0) return 0;
+            Array.Sort(height, weight);
+            int count = 1;
+            int last = weight[0];
+            int cur = 1;
+            while (cur < weight.Length)
+            {
+                if (weight[cur] > last)
+                {
+                    last = weight[cur];
+                    count += 1;
+                    cur += 1;
+                }
+                else
+                {
+                    if (count > 1)
+                    {
+                        if (cur + count - 1 < weight.Length && weight[cur + count - 1] < last)
+                        {
+                            
+                        }
+                        else
+                        {
+                            cur += 1;
+                        }
+                    } else
+                    {
+                        last = weight[cur];
+                        cur += 1;
+                    }
+                }
+                
+            }
+            return count;
+        }
+        bool IsBadVersion(int version)
+        {
+            return true;
+        }
+        public int FirstBadVersion(int n)
+        {
+            int low = 1;
+            int high = n;
+            while (low <= high)
+            {
+                int mid = low + ((high - low) >> 1);
+                if (IsBadVersion(mid))
+                {
+                    high = mid - 1;
+                } else
+                {
+                    low = mid + 1;
+                }
+            }
+            return low;
+        }
+        public int SearchInsert(int[] nums, int target)
+        {
+            int low = 0;
+            int high = nums.Length - 1;
+            while (low <= high)
+            {
+                int mid = low + ((high - low) >> 1);
+                if (nums[mid] == target) return mid;
+                if (nums[mid] > target)
+                {
+                    high = mid - 1;
+                }
+                else
+                {
+                    low = mid + 1;
+                }
+            }
+            return low;
+        }
+        public int[] SearchRange(int[] nums, int target)
+        {
+            // 没找到 [-1,-1]
+            // 二分找两次，一次找下界，一次找上界
+            // [5,7,7,8,8,10]
+            // 先找下界
+            int rangeLow = -1;
+            int rangeHigh = -1;
+            int low = 0;
+            int high = nums.Length - 1;
+            while (low <= high)
+            {
+                int mid = low + ((high - low) >> 1);
+                if (nums[mid] >= target)
+                {
+                    high = mid - 1;
+                }
+                else
+                {
+                    low = mid + 1;
+                }
+            }
+            if (low < nums.Length && nums[low] == target)
+            {
+                rangeLow = low;
+            }
+            // 找上界
+            low = 0;
+            high = nums.Length - 1;
+            while (low <= high)
+            {
+                int mid = low + ((high - low) >> 1);
+                Console.WriteLine($"{low} {mid} {high}");
+                if (nums[mid] > target)
+                {
+                    high = mid - 1;
+                }
+                else
+                {
+                    low = mid + 1;
+                }
+            }
+            if (high >= 0 && nums[high] == target)
+            {
+                rangeHigh = high;
+            }
+
+            return new int[2] { rangeLow, rangeHigh };
+        }
+        public double MyPow(double x, int n)
+        {
+            if (n == 1) return x;
+            if (n == -1) return 1 / x;
+            int left = n / 2;
+            int right = n - left;
+            return MyPow(x, left) * MyPow(x, right);
+        }
+        public bool BinarySearch2(int[] nums, int target)
+        {
+            int low = 0;
+            int high = nums.Length - 1;
+            while (low <= high)
+            {
+                int mid = low + ((high - low) >> 1);
+                if (nums[mid] == target) return true;
+                if (nums[mid] > target)
+                {
+                    high = mid - 1;
+                }
+                else
+                {
+                    low = mid + 1;
+                }
+            }
+            return false;
+        }
+        public bool SearchMatrix2(int[][] matrix, int target)
+        {
+            int width = matrix[0].Length;
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                if (matrix[i][0] <= target && target <= matrix[i][width - 1])
+                {
+                    if (BinarySearch2(matrix[i], target)) return true;
+                }
+            }
+            return false;
+        }
+        public bool SearchMatrix3(int[][] matrix, int target)
+        {
+            if (matrix.Length == 0) return false;
+            if (matrix[0].Length == 0) return false;
+            int col = 0;
+            int row = matrix.Length - 1;
+            while (row >= 0 && col <= matrix[0].Length - 1)
+            {
+                if (matrix[row][col] == target) return true;
+                if (matrix[row][col] > target)
+                {
+                    row -= 1;
+                }
+                else
+                {
+                    col += 1;
+                }
+            }
+            return false;
+        }
         public static void Main()
         {
             Solution solution = new Solution();
@@ -1051,7 +1245,7 @@ namespace Exercise
             // var output = solution.NumDecodings("111111111");
             // Console.WriteLine(output.ToString());
             // Console.WriteLine(output.ToString());
-            solution.BitOperation();
+            solution.SearchRange(new int[] { 5, 7, 7, 8, 8, 10 }, 5);
             Console.ReadLine();
         }
 
