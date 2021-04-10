@@ -1233,6 +1233,27 @@ namespace Exercise
             }
             return false;
         }
+        public bool IsUgly(int n)
+        {
+            List<int> uglyFact = new List<int>() { 2, 3, 5 };
+            int result = n;
+            while (result != 1)
+            {
+                bool flag = false;
+                for (int i = 0; i < uglyFact.Count; i++)
+                {
+                    if (result % uglyFact[i] == 0)
+                    {
+                        result = result / uglyFact[i];
+                        flag = true;
+                        //Console.WriteLine(uglyFact[i]);
+                        break;
+                    }
+                }
+                if (!flag) return false;
+            }
+            return true;
+        }
         public static void Main()
         {
             Solution solution = new Solution();
@@ -1245,7 +1266,7 @@ namespace Exercise
             // var output = solution.NumDecodings("111111111");
             // Console.WriteLine(output.ToString());
             // Console.WriteLine(output.ToString());
-            solution.SearchRange(new int[] { 5, 7, 7, 8, 8, 10 }, 5);
+            solution.IsUgly(216);
             Console.ReadLine();
         }
 
