@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Numerics;
 
 namespace Exercise
 {
@@ -1254,6 +1254,495 @@ namespace Exercise
             }
             return true;
         }
+        public class LargeNumberNode
+        {
+            public string c;
+            public SortedList<char,LargeNumberNode> children;
+            public LargeNumberNode(string c)
+            {
+                this.c = c;
+                this.children = new SortedList<char, LargeNumberNode>();
+            }
+            public void InsertNumber(string str)
+            {
+
+            }
+        }
+        public string getLargestNumber(LargeNumberNode node)
+        {
+            if (node.children.Count == 0)
+            {
+                return node.c;
+            }
+            else
+            {
+                string result = "";
+                foreach (char key in node.children.Keys)
+                {
+                    LargeNumberNode child = node.children[key];
+                    result += node.c + getLargestNumber(child);
+                }
+                return result;
+            }
+        }
+        public string LargestNumber(int[] nums)
+        {
+            LargeNumberNode root = new LargeNumberNode("");
+            for (int i = 0; i < nums.Length; i++)
+            {
+                root.InsertNumber(nums[i].ToString());
+            }
+            return getLargestNumber(root);
+        }
+        public int RemoveElement(int[] nums, int val)
+        {
+            int length = nums.Length;
+            int output = 0;
+            for (int i = 0; i < length; i++)
+            {
+                if (nums[i] != val)
+                {
+                    if (output != i)
+                    {
+                        nums[output] = nums[i];
+                        output += 1;
+                    }
+                    output += 1;
+                }
+            }
+            return output;
+        }
+        public int FindPoisonedDuration(int[] timeSeries, int duration)
+        {
+            int output = 0;
+            int endTime = 0;
+            int length = timeSeries.Length;
+            for (int i = 0; i < length; i++)
+            {
+                int current = timeSeries[i];
+                if (current >= endTime)
+                {
+                    output += duration;
+                    endTime = current + duration;
+                } else
+                {
+                    output += duration - (endTime - current);
+                    endTime = current + duration;
+                }
+            }
+            return output;
+        }
+        public int MaxSubArray(int[] nums)
+        {
+            // [-1,-2,-3,-4]
+            int pre = 0, maxAns = nums[0];
+            foreach (int x in nums)
+            {
+                pre = Math.Max(pre + x, x);
+                maxAns = Math.Max(maxAns, pre);
+            }
+            return maxAns;
+/*
+            int length = nums.Length;
+            if (length == 1) return nums[0];
+            int max = nums[0];
+            int[,] cache = new int[length, length];
+            for (int start = 0; start < length; start++)
+            {
+                for (int end = start + 1; end < length + 1; end++)
+                {
+                    if (end == start + 1)
+                    {
+                        cache[start, end] = nums[start];
+                        max = max > cache[start, end] ? max : cache[start, end];
+                    }
+                    else
+                    {
+                        cache[start, end] = cache[start, end - 1] + nums[end - 1];
+                        max = max > cache[start, end] ? max : cache[start, end];
+                    }
+                }
+            }
+            return max;
+*/
+        }
+        public bool WordBreak2(string s, IList<string> wordDict)
+        {
+            if (s.Length == 0) return true;
+            for (int i = 0; i < wordDict.Count; i++)
+            {
+                string word = wordDict[i];
+                if (s.StartsWith(word))
+                {
+                    bool result = WordBreak(s.Substring(word.Length), wordDict);
+                    if (result) return true;
+                }
+            }
+            return false;
+        }
+        public bool WordBread3(string s, IList<string> wordDict)
+        {
+            int i = 0;
+            while (i < wordDict.Count)
+            {
+                string key = wordDict[i];
+                wordDict.Remove(key);
+                if (!WordBreak2(key, wordDict))
+                {
+                    wordDict.Insert(i, key);
+                    i += 1;
+                }
+            }
+            return WordBreak2(s, wordDict);
+        }
+        public bool WordBreak(string s, IList<string> wordDict)
+        {
+            if (s.Length == 0) return false;
+            HashSet<string> dict = new HashSet<string>(wordDict);
+            HashSet<int> visited = new HashSet<int>();
+            Stack<int> stk = new Stack<int>();
+            stk.Push(0);
+            while(stk.Count > 0)
+            {
+                int start = stk.Pop();
+                if (start >= s.Length) return true;
+                if (!visited.Contains(start))
+                {
+                    visited.Add(start);
+                    for (int i = start + 1; i <= s.Length ; i++)
+                    {
+                        int length = i - start;
+                        string key = s.Substring(start, length);
+                        if (dict.Contains(key))
+                        {
+                            stk.Push(start + length);
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        public int StrStr(string haystack, string needle)
+        {
+            // naive
+            //if (needle.Length == 0) return 0;
+            //int needleLength = needle.Length;
+            //int stackLength = haystack.Length;
+            //for (int i = 0; i < stackLength; i++)
+            //{
+            //    if (i+ needleLength > stackLength)
+            //    {
+            //        return -1;
+            //    }
+            //    if (haystack.Substring(i, needleLength) == needle)
+            //    {
+            //        return i;
+            //    }
+            //}
+            //return -1;
+            if (needle.Length == 0) return 0;
+            int needleLength = needle.Length;
+            int stackLength = haystack.Length;
+            int i = 0;
+            while (i <= stackLength - needleLength)
+            {
+                bool matched = true;
+                for (int j = 0; j < needleLength; j++)
+                {
+                    if (needle[j] != haystack[i + j])
+                    {
+                        if (j == 0)
+                        {
+                            i += 1;
+                        } else
+                        {
+                            i += j;
+                        }
+                        matched = false;
+                        break;
+                    }
+                }
+                if (matched) return i;
+            }
+            return -1;
+        }
+        public string FrequencySort(string s)
+        {
+            Dictionary<char, int> cnt = new Dictionary<char, int>();
+            foreach (char c in s)
+            {
+                if (cnt.ContainsKey(c))
+                {
+                    cnt[c] += 1;
+                } else
+                {
+                    cnt[c] = 1;
+                }
+            }
+            var list = cnt.OrderByDescending(d => d.Value).ToList();
+            string output = "";
+            foreach (var pairs in list)
+            {
+                output += new string(pairs.Key, pairs.Value);
+            }
+            return output;
+        }
+        public int ShortestPathBinaryMatrix(int[][] grid)
+        {
+            var directions = new Complex[8] { new Complex(1, 0), new Complex(-1, 0), new Complex(0, 1), new Complex(0, -1), new Complex(1, 1), new Complex(-1, -1), new Complex(1, -1), new Complex(-1, 1) };
+            int height = grid.Length;
+            int width = grid[0].Length;
+            HashSet<Complex> legalPos = new HashSet<Complex>();
+            for (int r = 0; r < height; r++)
+            {
+                for (int c = 0; c < width; c++)
+                {
+                    if (grid[r][c] == 0)
+                    {
+                        legalPos.Add(new Complex(r, c));
+                    }
+                }
+            }
+            int bfs(Complex begin, Complex end, HashSet<Complex> legalPositions)
+            {
+                Dictionary<Complex, int> bfsDict = new Dictionary<Complex, int>();
+                bfsDict[begin]=1;
+                while (bfsDict.Count > 0)
+                {
+                    Dictionary<Complex,int> tempDict = new Dictionary<Complex, int>();
+                    foreach ( var pair in bfsDict )
+                    {
+                        Complex currentPosition = pair.Key;
+                        int step = pair.Value;
+                        foreach (Complex direction in directions)
+                        {
+                            Complex nextPosition = currentPosition + direction;
+                            if (legalPositions.Contains(nextPosition))
+                            {
+                                if (nextPosition == end) return step + 1;
+                                tempDict[nextPosition] = step + 1;
+                                legalPositions.Remove(nextPosition);
+                            }
+                        }
+                    }
+                    bfsDict = tempDict;
+                }
+                return -1;
+            }
+            return bfs(new Complex(0, 0), new Complex(height - 1, width - 1), legalPos);
+        }
+        public int MaxDistance(int[][] grid)
+        {
+            int height = grid.Length;
+            int width = grid[0].Length;
+            int output = 0;
+            HashSet<(int, int)> unvisited = new HashSet<(int, int)>();
+            Queue<(int, int, int)> queue = new Queue<(int, int, int)>();
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (grid[i][j] == 0)
+                    {
+                        unvisited.Add((i, j));
+                    }
+                    else
+                    {
+                        queue.Enqueue((i, j, 0));
+                    }
+                }
+            }
+            if (unvisited.Count == 0 || queue.Count == 0)
+            {
+                return -1;
+            }
+            var directions = new (int, int)[4] { (1, 0), (-1, 0), (0, 1), (0, -1) };
+            while(queue.Count > 0)
+            {
+                (int r, int c, int step) = queue.Dequeue();
+                foreach (var direction in directions)
+                {
+                    (int,int) next = (r + direction.Item1, c + direction.Item2);
+                    if (unvisited.Contains(next))
+                    {
+                        unvisited.Remove(next);
+                        output = Math.Max(step + 1, output);
+                        queue.Enqueue((next.Item1, next.Item2, step + 1));
+                    }
+                }
+            }
+            return output;
+        }
+        public bool ValidateStackSequences(int[] pushed, int[] popped)
+        {
+            // pushed [1,2,3,4,5]
+            // popped [3,4,2,5,1]
+            // [4,3,5,1,2]
+            Stack<int> sim = new Stack<int>();
+            int l1 = pushed.Length;
+            int l2 = popped.Length;
+            int i = 0;
+            int j = 0;
+            while (true)
+            {
+                if (sim.Count == 0)
+                {
+                    if (i >= l1)
+                    {
+                        if (j >= l2)
+                        {
+                            return true;
+                        } else
+                        {
+                            return false;
+                        }
+                    }
+                    sim.Push(pushed[i]);
+                    i += 1;
+                } else
+                {
+                    int peek = sim.Peek();
+                    if (j >= l2) return true;
+                    if (peek == popped[j])
+                    {
+                        sim.Pop();
+                        j += 1;
+                    }
+                    else
+                    {
+                        if (i >= l1) return false;
+                        sim.Push(pushed[i]);
+                        i += 1;
+                    }
+                }
+            }
+        }
+        public IList<string> PrintKMoves(int K)
+        {
+            // configuration
+            char white = '_';
+            char black = 'X';
+            char left = 'L';
+            char up = 'U';
+            char right = 'R';
+            char down = 'D';
+
+            Dictionary<char, (int, int)> directions = new Dictionary<char, (int, int)>();
+            directions.Add(up, (0, -1));
+            directions.Add(right, (1, 0));
+            directions.Add(down, (0, 1));
+            directions.Add(left, (-1, 0));
+            char[] turnAround = new char[4] { up, right, down, left }; 
+            char turnLeft(char d)
+            {
+                int index = Array.IndexOf(turnAround, d);
+                index = (index - 1) % 4;
+                return turnAround[index];
+            }
+            char turnRight(char d)
+            {
+                int index = Array.IndexOf(turnAround, d);
+                index = (index + 1) % 4;
+                return turnAround[index];
+            }
+            Dictionary<(int, int), char> map = new Dictionary<(int, int), char>();
+            int step = 0;
+            char direction = 'R';
+            int leftMost = 0;
+            int rightMost = 0;
+            int upMost = 0;
+            int downMost = 0;
+            (int x, int y) = (0, 0);
+            // run sim
+            while (step < K)
+            {
+                step += 1;
+                if (!map.ContainsKey((x, y)))
+                {
+                    map[(x, y)] = white;
+                }
+                char color = map[(x, y)];
+                if (color == white)
+                {
+                    map[(x, y)] = black;
+                    direction = turnRight(direction);
+                    (int dx, int dy) = directions[direction];
+                    (x, y) = (x + dx, y + dy);
+                    leftMost = Math.Min(leftMost, x);
+                    rightMost = Math.Max(rightMost, x);
+                    upMost = Math.Min(upMost, y);
+                    downMost = Math.Max(downMost, y);
+                }
+                else
+                {
+                    map[(x, y)] = white;
+                    direction = turnLeft(direction);
+                    (int dx, int dy) = directions[direction];
+                    (x, y) = (x + dx, y + dy);
+                    leftMost = Math.Min(leftMost, x);
+                    rightMost = Math.Max(rightMost, x);
+                    upMost = Math.Min(upMost, y);
+                    downMost = Math.Max(downMost, y);
+                }
+            }
+            // draw map
+            int width = rightMost - leftMost + 1;
+            int height = downMost - upMost + 1;
+            IList<string> output = new List<string>();
+            for (int r = 0; r < height; r++)
+            {
+                string row = "";
+                for (int c = 0; c < width; c++)
+                {
+                    (int i, int j) = (c + leftMost, r + upMost);
+                    if ((i,j) == (x, y))
+                    {
+                        row += direction;
+                    }else if (map.ContainsKey((i, j)))
+                    {
+                        row += map[(i, j)];
+                    }else
+                    {
+                        row += white;
+                    }
+                }
+                output.Add(row);
+            }
+            return output;
+        }
+        public int CountDigitOne(int n)
+        {
+            Dictionary<string, int> dp = new Dictionary<string, int>();
+
+            int count(string number)
+            {
+                if (dp.ContainsKey(number))
+                {
+                    return dp[number];
+                }
+                else
+                {
+                    int result = 0;
+                    int digit = number.Length;
+                    if (digit == 1) return 1;
+                    int head = int.Parse(number[0].ToString());
+                    string remain = int.Parse(number.Substring(1)).ToString();
+                    string degrade = new string('9', digit - 1);
+
+                    if (head == 1)
+                    {
+                        result = int.Parse(number.Substring(1)) + count(remain) + count(degrade) + 1;
+                    }
+                    else
+                    {
+                        result = count(remain) + (int)Math.Pow(10, digit - 1) + (head - 1) * count(degrade);
+                    }
+                    dp[number] = result;
+                    return result;
+                }
+            }
+            return count(n.ToString());
+        }
         public static void Main()
         {
             Solution solution = new Solution();
@@ -1266,7 +1755,8 @@ namespace Exercise
             // var output = solution.NumDecodings("111111111");
             // Console.WriteLine(output.ToString());
             // Console.WriteLine(output.ToString());
-            solution.IsUgly(216);
+            //bool result = solution.WordBreak("leetcode",new List<string>() { "leet","code" });
+            Console.WriteLine(int.Parse("0030"));
             Console.ReadLine();
         }
 
