@@ -1743,6 +1743,56 @@ namespace Exercise
             }
             return count(n.ToString());
         }
+        public int KthGrammar(int N, int K)
+        {
+            if (N == 1) return 0;
+            int K_1 = (K-1) / 2;
+            int remain = K % 2;
+            int K_1Grammar = KthGrammar(N - 1, K_1);
+            if (remain == 0)
+            {
+                return K_1Grammar;
+            }
+            else
+            {
+                return 1 - K_1Grammar;
+            }
+        }
+        public class WordsFrequency
+        {
+            private Dictionary<string, int> dict;
+
+            public WordsFrequency(string[] book)
+            {
+                dict = new Dictionary<string, int>();
+                foreach (string word in book)
+                {
+                    if (dict.ContainsKey(word))
+                    {
+                        dict[word] += 1;
+                    } else
+                    {
+                        dict[word] = 1;
+                    }
+                }
+            }
+
+            public int Get(string word)
+            {
+                if (!dict.ContainsKey(word))
+                {
+                    return 0;
+                }
+                else
+                {
+                    return dict[word];
+                }
+            }
+        }
+        public IList<IList<int>> Subsets(int[] nums)
+        {
+
+        }
         public static void Main()
         {
             Solution solution = new Solution();
