@@ -1789,10 +1789,31 @@ namespace Exercise
                 }
             }
         }
-        public IList<IList<int>> Subsets(int[] nums)
+        //public TreeNode IncreasingBST(TreeNode root)
+        //{
+        //    TreeNode left = root.left;
+        //    TreeNode right = root.right;
+        //    TreeNode newRoot = root;
+        //    if (left != null)
+        //    {
+        //        TreeNode tail = getTail(left);
+        //        tail.right = root;
+        //        root.left = null;
+        //        newRoot = tail;
+        //    }
+        //    if (right != null)
+        //    {
+        //        TreeNode head = getHead(right);
+        //        root.right = head;
+        //    }
+        //    return newRoot;
+        //}
+
+        public bool CanCross(int[] stones)
         {
 
         }
+
         public static void Main()
         {
             Solution solution = new Solution();
